@@ -10,12 +10,12 @@ import './styles/main.scss';
 function App() {
   return (
     <Switch>
-      <PrivateRoute exact path="/hii">
+      <PublicRoute exact path="/signIn">
         <SignIn/>
-      </PrivateRoute>
-      <PublicRoute exact path="/hello">
-        <Home/>
       </PublicRoute>
+      <PrivateRoute exact path="/">
+        <Home/>
+      </PrivateRoute>
     </Switch>
   );
 }

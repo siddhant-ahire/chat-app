@@ -6,17 +6,20 @@ import Home from './pages/Home';
 import PublicRoute from './components/PublicRoute';
 import 'rsuite/dist/styles/rsuite-default.css';
 import './styles/main.scss';
+import { ProfileProvider } from './context/profile.context';
 
 function App() {
   return (
-    <Switch>
-      <PublicRoute exact path="/signIn">
-        <SignIn/>
-      </PublicRoute>
-      <PrivateRoute exact path="/">
-        <Home/>
-      </PrivateRoute>
-    </Switch>
+    <ProfileProvider>
+      <Switch>
+        <PublicRoute exact path="/signIn">
+          <SignIn/>
+        </PublicRoute>
+        <PrivateRoute exact path="/">
+          <Home/>
+        </PrivateRoute>
+      </Switch>
+    </ProfileProvider>
   );
 }
 

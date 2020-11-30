@@ -40,7 +40,7 @@ const EditableInput = ({initialValue, onSave, label = null, placeholder = "write
                      <Icon icon={isEditable ? 'close' : 'edit2'}/>
                  </InputGroup.Button>
                  <InputGroup.Button onClick={onSaveClick}>
-                     <Icon icon="check"/>
+                     <Icon icon={isEditable ? 'check' : ''}/>
                  </InputGroup.Button>
             </InputGroup>
         </div>

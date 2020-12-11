@@ -39,7 +39,7 @@ const EditRoomBtnDrawer = () => {
             <Drawer full={isMobile} show={isOpen} onHide={close} placement="right">
                 <Drawer.Header>
                     <Drawer.Title>
-                        d
+                        {name}
                     </Drawer.Title>
                 </Drawer.Header>
                 <Drawer.Body>

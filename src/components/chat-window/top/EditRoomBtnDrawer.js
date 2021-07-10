@@ -10,7 +10,7 @@ const EditRoomBtnDrawer = () => {
 
     const {isOpen, open, close} = useModalState();
     const name = useCurrentRoom(v => v.name);
-    const descritption = useCurrentRoom(v => v.descritption);
+    const description = useCurrentRoom(v => v.description);
     const {chatId} = useParams();
     const isMobile = useMediaQuery('(max-width: 992px)');
 
@@ -33,8 +33,8 @@ const EditRoomBtnDrawer = () => {
 
     return (
         <div>
-            <Button className="br-circle" size="sm" color="red" onClick={open}>
-                A
+            <Button appearance = "link" size="sm" color="red" onClick={open}>
+                Edit Room
             </Button>
             <Drawer full={isMobile} show={isOpen} onHide={close} placement="right">
                 <Drawer.Header>
@@ -53,7 +53,7 @@ const EditRoomBtnDrawer = () => {
                     <EditableInput
                         componentClass = "textarea"
                         rows = {5}
-                        initialValue={descritption}
+                        initialValue={description}
                         onSave={onDescriptionSave}
                         emptyMsg="Description can not be empty"
                     />

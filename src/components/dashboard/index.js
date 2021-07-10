@@ -40,6 +40,8 @@ const Dashboard = ({onSignOut}) => {
             <Button block color="red" onClick={onSignOut}>
                 Sign out
             </Button>
+            <p style={{marginTop:10,textAlign:'center'}}>Made with ❤️ by 
+            <a href="https://siddhant-ahire.github.io" rel="noreferrer" target="_blank"> Siddhant Ahire</a></p>
         </Drawer.Footer>
     </>
 };

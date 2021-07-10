@@ -2,25 +2,48 @@ import React, { memo } from 'react'
 import { Button } from 'rsuite';
 import TimeAgo from 'timeago-react';
 import { useCurrentRoom } from '../../../context/create-room.context';
-import { useHover } from '../../../misc/custom-hooks';
+import { useHover, useMediaQuery } from '../../../misc/custom-hooks';
 import { auth } from '../../../misc/firebase';
 import ProfileAvatar from '../../dashboard/ProfileAvatar';
 import PresenceDot from '../../PresenceDot';
 import IconBtnControl from './IconBtnControl';
+import ImgBtnMoadal from './ImgBtnMoadal';
 import ProfileInfoBtnModal from './ProfileInfoBtnModal';
 
-const MessageItem = ({message,handleAdmin}) => {
+const renderFileMessage = file => {
+    if(file.contentType.includes('image')){
+        return (
+            <div className="height-220">
+                <ImgBtnMoadal src={file.url} fileName={file.name}/>
+            </div>
+        )
+    }
 
-    const {author, createdAt, text} = message;
+    if(file.contentType.includes('audio')){
+        return <audio controls>
+            <source src={file.url} type="audio/wav"/>
+            <track src="captions_es.vtt" kind="captions"/>
+            Your browser does not support the audio element.
+        </audio>
+    }
+    return <a href={file.url}>Download {file.name}</a>
+}
+
+const MessageItem = ({message,handleAdmin,handleLike,handleDelete}) => {
+
+    const {author, createdAt,file, likes,text,likeCount} = message;
 
     const [selfRef, isHovered] = useHover();
-
+    const isMobile = useMediaQuery(('(max-width: 992px'));
     const isAdmin = useCurrentRoom(v => v.isAdmin);
     const admins = useCurrentRoom(v => v.admins);
     
     const isMsgAuthorAdmin = admins.includes(author.uid);
     const isAuthor = auth.currentUser.uid === author.uid;
     const canGrantAdmin = isAdmin && !isAuthor;
+
+    const canShowIcon = isMobile || isHovered;
+    const isLiked = likes && Object.keys(likes).includes(auth.currentUser.uid);
 
     return (
         <li className={`padded mb-1 cursor-pointer ${isHovered ? 'bg-black-02': ''}`} ref={selfRef}>
@@ -35,17 +58,28 @@ const MessageItem = ({message,handleAdmin}) => {
                 </ProfileInfoBtnModal>
                 <TimeAgo datetime={createdAt} className="font-normal text-black-45 ml-2"/>
                 <IconBtnControl
-                    {...(false ? {color: 'red'}:{})}
-                    isVisible
+                    {...(isLiked ? {color: 'red'}:{})}
+                    isVisible={canShowIcon}
                     iconName="heart"
                     tooltip="Like this Message"
-                    onClick={()=>{}}
-                    badgeContent={5}
+                    onClick={()=> handleLike(message.id)}
+                    badgeContent={likeCount}
                 />
+                {isAdmin && (
+                    <IconBtnControl
+                    isVisible={canShowIcon}
+                    iconName="close"
+                    tooltip="Delete this Message"
+                    onClick={()=> handleDelete(message.id,file)}
+                />
+                )
+
+                }
                 
             </div>
             <div>
-                <span className="word-breal-all">{text}</span>
+                {text && <span className="word-breal-all">{text}</span>}
+                {file && renderFileMessage(file)}
             </div>
 
         </li>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import firebase from 'firebase/app';
 import {  Container, Grid, Row, Col, Panel, Button, Icon, Alert } from 'rsuite'
 import { auth, database } from '../misc/firebase'
@@ -29,6 +29,19 @@ const SignIn = () => {
     const onGoogleSignIn = () => {
         signInWithProvider(new firebase.auth.GoogleAuthProvider() )
     };
+
+    
+    const [deferredPrompt, setDeferredPrompt] = useState();
+    window.addEventListener("beforeinstallprompt", function(beforeInstallPromptEvent) {
+    beforeInstallPromptEvent.preventDefault();
+        setDeferredPrompt(beforeInstallPromptEvent)  
+    })
+    const onClick = () => {
+        deferredPrompt.prompt();
+    }
+    setTimeout(() => {
+        Alert.success(<Button color="green" appearance="link" onClick={onClick}>Download App Now</Button>,100000)
+    },3000)
 
     return <Container>
             <Grid className="mt-page">
